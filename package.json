@@ -1,0 +1,131 @@
+{
+  "name": "@sensenet/react-typescript-boilerplate",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "sensenet",
+    "cps",
+    "single page application",
+    "boilerplate",
+    "react",
+    "typescript"
+  ],
+  "scripts": {
+    "fix:prettier": "prettier \"{,!(dist|temp|bundle)/**/}*.{ts,tsx}\" --write",
+    "build": "rimraf bundle && webpack",
+    "start": "webpack-dev-server --progress",
+    "test": "jest --coverage",
+    "lint": "eslint . --ext .tsx,.ts --cache"
+  },
+  "private": true,
+  "publishConfig": {
+    "access": "private"
+  },
+  "author": "Sense/Net <snteam@sensenet.com> (http://sensenet.com/)",
+  "license": "GPL-2.0",
+  "homepage": "https://sensenet.com",
+  "devDependencies": {
+    "@types/react": "^16.8.19",
+    "@types/react-dom": "^16.8.4",
+    "@types/enzyme": "^3.9.3",
+    "@types/jest": "^24.0.13",
+    "@typescript-eslint/eslint-plugin": "^1.10.2",
+    "@typescript-eslint/parser": "^1.10.2",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.13.2",
+    "enzyme-to-json": "^3.3.5",
+    "eslint": "^6.0.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-cypress": "^2.2.1",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jsdoc": "^8.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-react-hooks": "^1.6.0",
+    "husky": "^2.3.0",
+    "jest": "^24.8.0",
+    "awesome-typescript-loader": "^5.2.1",
+    "css-loader": "^3.0.0",
+    "file-loader": "^4.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "rimraf": "^2.6.3",
+    "source-map-loader": "^0.2.4",
+    "style-loader": "^0.23.1",
+    "ts-config-webpack-plugin": "^1.3.1",
+    "lint-staged": "^8.1.7",
+    "prettier": "^1.17.1",
+    "ts-jest": "^24.0.2",
+    "tslib": "^1.9.3",
+    "typescript": "^3.5.2",
+    "url-loader": "^2.0.1",
+    "webpack": "^4.32.2",
+    "webpack-bundle-analyzer": "^3.3.2",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.4.1"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.2.0",
+    "@sensenet/client-core": "^2.1.0",
+    "@sensenet/default-content-types": "^1.2.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "linters": {
+      "*.{ts,tsx}": [
+        "eslint --ext .tsx,.ts --cache --fix",
+        "prettier --write",
+        "git add"
+      ],
+      "*.{js,jsx}": [
+        "prettier --write",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "*.d.ts"
+    ]
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/test",
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest",
+      "^.+\\.css$": "<rootDir>/jest/cssTransform.js",
+      "^.+\\.(png|jpg|gif)$": "<rootDir>/jest/fileTransform.js"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig-base.json"
+      }
+    },
+    "testMatch": [
+      "**/test/*.+(ts|tsx|js)",
+      "**/test/**/*.+(ts|tsx|js)"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest/setup.js"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}"
+    ],
+    "coverageReporters": [
+      "json",
+      "html"
+    ]
+  }
+}
