@@ -3,6 +3,7 @@ import { Button, CssBaseline, Tooltip, Typography } from '@material-ui/core'
 import snLogo from './assets/sensenet_logo_transparent.png'
 import { useCurrentUser } from './hooks/use-current-user'
 import { useRepository } from './hooks/use-repository'
+import TodoList from './components/todo-list'
 
 /**
  * The main entry point of your app. You can start h@cking from here ;)
@@ -28,6 +29,7 @@ export const App: React.FunctionComponent = () => {
       <Typography variant="h3" gutterBottom>
         Hello, {usr.Name} 😎
       </Typography>
+      <TodoList />
       <Tooltip title="Return to the Login screen and select another repository">
         <Button variant="outlined" color="primary" onClick={() => repo.authentication.logout()}>
           Log out 🚪
