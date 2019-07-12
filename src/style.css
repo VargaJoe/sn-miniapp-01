@@ -37,3 +37,8 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+/* completed */
+.comp {
+  text-decoration: line-through;
+}

@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
+// start of material imports
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -7,7 +9,14 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
 import Checkbox from '@material-ui/core/Checkbox'
 import IconButton from '@material-ui/core/IconButton'
-import CommentIcon from '@material-ui/icons/Comment'
+import DeleteIcon from '@material-ui/icons/Delete'
+// end of material imports
+
+// start of sensenet imports
+import { ConstantContent, ODataCollectionResponse } from '@sensenet/client-core'
+import { GenericContent } from '@sensenet/default-content-types'
+import { useRepository } from '../hooks/use-repository'
+// end of sensenet imports
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,7 +28,32 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
-export default function CheckboxList() {
+/**
+ * Todo List
+ */
+const TodoListPanel = () => {
+  const repo = useRepository() // Custom hook that will return with a Repository object
+  const [data, setData] = useState<any[]>([])
+
+  useEffect(() => {
+    /**
+     * load from repo
+     */
+    async function loadContents() {
+      const result: ODataCollectionResponse<GenericContent> = await repo.loadCollection({
+        path: `${ConstantContent.PORTAL_ROOT.Path}/Content/IT/Tasks`,
+        oDataOptions: {
+          select: ['DisplayName', 'Description', 'CreationDate', 'CreatedBy', 'Status'] as any,
+          orderby: [['CreationDate', 'desc']],
+          expand: ['CreatedBy'] as any,
+        },
+      })
+
+      setData(result.d.results)
+    }
+    loadContents()
+  }, [repo])
+
   const classes = useStyles()
   const [checked, setChecked] = React.useState([0])
 
@@ -36,31 +70,32 @@ export default function CheckboxList() {
     setChecked(newChecked)
   }
 
-  return (
-    <List className={classes.root}>
-      {[0, 1, 2, 3].map(value => {
-        const labelId = `checkbox-list-label-${value}`
+  const TodoItems = data.map(d => {
+    const labelId = `checkbox-list-label-${d.Id}`
+    const classCompleted = d.Status == 'completed' ? 'comp' : ''
 
-        return (
-          <ListItem key={value} role={undefined} dense button onClick={handleToggle(value)}>
-            <ListItemIcon>
-              <Checkbox
-                edge="start"
-                checked={checked.indexOf(value) !== -1}
-                tabIndex={-1}
-                disableRipple
-                inputProps={{ 'aria-labelledby': labelId }}
-              />
-            </ListItemIcon>
-            <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
-            <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="Comments">
-                <CommentIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        )
-      })}
-    </List>
-  )
+    return (
+      <ListItem key={d.Id} role={undefined} dense button onClick={handleToggle(d.Id)}>
+        <ListItemIcon>
+          <Checkbox
+            edge="start"
+            checked={checked.indexOf(d.Id) !== -1}
+            tabIndex={-1}
+            disableRipple
+            inputProps={{ 'aria-labelledby': labelId }}
+          />
+        </ListItemIcon>
+        <ListItemText id={labelId} primary={`${d.DisplayName}`} className={classCompleted} />
+        <ListItemSecondaryAction>
+          <IconButton edge="end" aria-label="Delete">
+            <DeleteIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+      </ListItem>
+    )
+  })
+
+  return <List className={classes.root}>{TodoItems}</List>
 }
+
+export default TodoListPanel
