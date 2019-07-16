@@ -33,8 +33,10 @@ const useStyles = makeStyles((theme: Theme) =>
  */
 const TodoListPanel = () => {
   const repo = useRepository() // Custom hook that will return with a Repository object
-  const [data, setData] = useState<any[]>([])
-
+  const classes = useStyles()
+  const [checked, setChecked] = useState<number[]>([])
+  const [data, setData] = useState<Task[]>([])
+  console.log(checked)
   useEffect(() => {
     /**
      * load from repo
@@ -44,22 +46,20 @@ const TodoListPanel = () => {
         path: `${ConstantContent.PORTAL_ROOT.Path}/Content/IT/Tasks`,
         oDataOptions: {
           select: ['DisplayName', 'Description', 'CreationDate', 'CreatedBy', 'Status'] as any,
-          orderby: [['CreationDate', 'desc']],
+          orderby: ['Status', ['CreationDate', 'desc']],
           expand: ['CreatedBy'] as any,
         },
       })
 
       setData(result.d.results)
+      setChecked(result.d.results.filter(x => x.Status == 'completed').map(x => x.Id))
     }
     loadContents()
   }, [repo])
 
-  const classes = useStyles()
-  const [checked, setChecked] = React.useState([0])
-
   // Remove task
-  const deleteTask = async (taskData: Task[], task: Task) => {
-    const newdata = taskData.filter(x => x.Id != task.Id)
+  const deleteTask = async (task: Task) => {
+    const newdata = data.filter(x => x.Id != task.Id)
     await repo.delete({
       idOrPath: task.Path,
       permanent: true,
@@ -69,7 +69,7 @@ const TodoListPanel = () => {
 
   const toggleTask = async (task: Task) => {
     const currentIndex = checked.indexOf(task.Id)
-    const newChecked = [...checked]
+    const newChecked = checked
 
     if (task.Status != 'completed') {
       await repo.patch<any>({
@@ -78,7 +78,6 @@ const TodoListPanel = () => {
           Status: 'completed',
         },
       })
-
       newChecked.push(task.Id)
     } else {
       await repo.patch<any>({
@@ -87,11 +86,10 @@ const TodoListPanel = () => {
           Status: 'active',
         },
       })
-
       newChecked.splice(currentIndex, 1)
     }
-
     setChecked(newChecked)
+    console.log(checked)
   }
 
   const TodoItems = data.map(d => {
@@ -111,7 +109,7 @@ const TodoListPanel = () => {
         </ListItemIcon>
         <ListItemText id={labelId} primary={`${d.DisplayName}`} className={classCompleted} />
         <ListItemSecondaryAction>
-          <IconButton edge="end" aria-label="Delete" onClick={() => deleteTask(data, d)}>
+          <IconButton edge="end" aria-label="Delete" onClick={() => deleteTask(d)}>
             <DeleteIcon />
           </IconButton>
         </ListItemSecondaryAction>
