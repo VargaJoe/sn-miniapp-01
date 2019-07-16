@@ -14,7 +14,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 
 // start of sensenet imports
 import { ConstantContent, ODataCollectionResponse } from '@sensenet/client-core'
-import { GenericContent } from '@sensenet/default-content-types'
+import { Task } from '@sensenet/default-content-types'
 import { useRepository } from '../hooks/use-repository'
 // end of sensenet imports
 
@@ -40,7 +40,7 @@ const TodoListPanel = () => {
      * load from repo
      */
     async function loadContents() {
-      const result: ODataCollectionResponse<GenericContent> = await repo.loadCollection({
+      const result: ODataCollectionResponse<Task> = await repo.loadCollection({
         path: `${ConstantContent.PORTAL_ROOT.Path}/Content/IT/Tasks`,
         oDataOptions: {
           select: ['DisplayName', 'Description', 'CreationDate', 'CreatedBy', 'Status'] as any,
@@ -57,13 +57,37 @@ const TodoListPanel = () => {
   const classes = useStyles()
   const [checked, setChecked] = React.useState([0])
 
-  const handleToggle = (value: number) => () => {
-    const currentIndex = checked.indexOf(value)
+  // Remove task
+  const deleteTask = async (taskData: Task[], task: Task) => {
+    const newdata = taskData.filter(x => x.Id != task.Id)
+    await repo.delete({
+      idOrPath: task.Path,
+      permanent: true,
+    })
+    setData(newdata)
+  }
+
+  const toggleTask = async (task: Task) => {
+    const currentIndex = checked.indexOf(task.Id)
     const newChecked = [...checked]
 
-    if (currentIndex === -1) {
-      newChecked.push(value)
+    if (task.Status != 'completed') {
+      await repo.patch<any>({
+        idOrPath: task.Path,
+        content: {
+          Status: 'completed',
+        },
+      })
+
+      newChecked.push(task.Id)
     } else {
+      await repo.patch<any>({
+        idOrPath: task.Path,
+        content: {
+          Status: 'active',
+        },
+      })
+
       newChecked.splice(currentIndex, 1)
     }
 
@@ -75,11 +99,11 @@ const TodoListPanel = () => {
     const classCompleted = d.Status == 'completed' ? 'comp' : ''
 
     return (
-      <ListItem key={d.Id} role={undefined} dense button onClick={handleToggle(d.Id)}>
+      <ListItem key={d.Id} role={undefined} dense button onClick={() => toggleTask(d)}>
         <ListItemIcon>
           <Checkbox
             edge="start"
-            checked={checked.indexOf(d.Id) !== -1}
+            checked={d.Status == 'completed'}
             tabIndex={-1}
             disableRipple
             inputProps={{ 'aria-labelledby': labelId }}
@@ -87,7 +111,7 @@ const TodoListPanel = () => {
         </ListItemIcon>
         <ListItemText id={labelId} primary={`${d.DisplayName}`} className={classCompleted} />
         <ListItemSecondaryAction>
-          <IconButton edge="end" aria-label="Delete">
+          <IconButton edge="end" aria-label="Delete" onClick={() => deleteTask(data, d)}>
             <DeleteIcon />
           </IconButton>
         </ListItemSecondaryAction>
