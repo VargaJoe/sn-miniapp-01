@@ -121,7 +121,7 @@ const TodoListPanel = () => {
             inputProps={{ 'aria-labelledby': labelId }}
           />
         </ListItemIcon>
-        <ListItemText id={labelId} primary={`${d.DisplayName}(${d.CreationDate})`} className={classCompleted} />
+        <ListItemText id={labelId} primary={`${d.DisplayName}`} className={classCompleted} />
         <ListItemSecondaryAction>
           <IconButton edge="end" aria-label="Delete" onClick={() => deleteTask(d)}>
             <DeleteIcon />
