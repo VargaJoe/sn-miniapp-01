@@ -35,9 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const TodoListPanel = () => {
   const repo = useRepository() // Custom hook that will return with a Repository object
   const classes = useStyles()
-  const [checked, setChecked] = useState<number[]>([])
   const [data, setData] = useState<Task[]>([])
-  console.log(checked)
 
   useEffect(() => {
     /**
@@ -54,12 +52,11 @@ const TodoListPanel = () => {
       })
 
       setData(result.d.results)
-      setChecked(result.d.results.filter(x => x.Status == 'completed').map(x => x.Id))
     }
     loadContents()
   }, [repo])
 
-  // Remove task
+  // Remove current task
   const deleteTask = async (task: Task) => {
     const newdata = [...data.filter(x => x.Id != task.Id)]
     await repo.delete({
@@ -73,6 +70,7 @@ const TodoListPanel = () => {
     const currentIndex = data.indexOf(task)
     const newdata = [...data]
 
+    // toggle current task status
     if (task.Status != 'completed') {
       await repo.patch<any>({
         idOrPath: task.Path,
@@ -90,8 +88,21 @@ const TodoListPanel = () => {
       })
       newdata[currentIndex].Status = Status.active
     }
+
+    // rearrange task order
+    newdata.sort((a, b) => {
+      if (a.Status === undefined || b.Status === undefined || a.Status === b.Status) {
+        return a.CreationDate == undefined || b.CreationDate == undefined || a.CreationDate > b.CreationDate
+          ? 1
+          : b.CreationDate < a.CreationDate
+          ? -1
+          : 0
+      }
+      return a.Status > b.Status ? 1 : b.Status > a.Status ? -1 : 0
+    })
+
+    // update data state
     setData(newdata)
-    console.log(data[currentIndex])
   }
 
   const TodoItems = data.map(d => {
