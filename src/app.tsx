@@ -1,16 +1,17 @@
 import React from 'react'
-import { Button, CssBaseline, Tooltip, Typography } from '@material-ui/core'
+import { CssBaseline } from '@material-ui/core'
 import snLogo from './assets/sensenet_logo_transparent.png'
-import { useCurrentUser } from './hooks/use-current-user'
-import { useRepository } from './hooks/use-repository'
+// import { useCurrentUser } from './hooks/use-current-user'
+// import { useRepository } from './hooks/use-repository'
+import HeaderPanel from './components/header'
 import TodoListPanel from './components/todo-list'
 
 /**
  * The main entry point of your app. You can start h@cking from here ;)
  */
 export const App: React.FunctionComponent = () => {
-  const usr = useCurrentUser()
-  const repo = useRepository()
+  // const usr = useCurrentUser()
+  // const repo = useRepository()
   return (
     <div
       style={{
@@ -26,15 +27,16 @@ export const App: React.FunctionComponent = () => {
         backgroundSize: 'auto',
       }}>
       <CssBaseline />
-      <Typography variant="h3" gutterBottom>
+      <HeaderPanel />
+      {/* <Typography variant="h3" gutterBottom>
         Hello, {usr.Name} 😎
-      </Typography>
+      </Typography> */}
       <TodoListPanel />
-      <Tooltip title="Return to the Login screen and select another repository">
+      {/* <Tooltip title="Return to the Login screen and select another repository">
         <Button variant="outlined" color="primary" onClick={() => repo.authentication.logout()}>
           Log out 🚪
         </Button>
-      </Tooltip>
+      </Tooltip> */}
     </div>
   )
 }
