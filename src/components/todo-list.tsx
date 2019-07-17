@@ -15,6 +15,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 // start of sensenet imports
 import { ConstantContent, ODataCollectionResponse } from '@sensenet/client-core'
 import { Task } from '@sensenet/default-content-types'
+import { Status } from '@sensenet/default-content-types/src/Enums'
 import { useRepository } from '../hooks/use-repository'
 // end of sensenet imports
 
@@ -37,6 +38,7 @@ const TodoListPanel = () => {
   const [checked, setChecked] = useState<number[]>([])
   const [data, setData] = useState<Task[]>([])
   console.log(checked)
+
   useEffect(() => {
     /**
      * load from repo
@@ -59,7 +61,7 @@ const TodoListPanel = () => {
 
   // Remove task
   const deleteTask = async (task: Task) => {
-    const newdata = data.filter(x => x.Id != task.Id)
+    const newdata = [...data.filter(x => x.Id != task.Id)]
     await repo.delete({
       idOrPath: task.Path,
       permanent: true,
@@ -68,8 +70,8 @@ const TodoListPanel = () => {
   }
 
   const toggleTask = async (task: Task) => {
-    const currentIndex = checked.indexOf(task.Id)
-    const newChecked = checked
+    const currentIndex = data.indexOf(task)
+    const newdata = [...data]
 
     if (task.Status != 'completed') {
       await repo.patch<any>({
@@ -78,7 +80,7 @@ const TodoListPanel = () => {
           Status: 'completed',
         },
       })
-      newChecked.push(task.Id)
+      newdata[currentIndex].Status = Status.completed
     } else {
       await repo.patch<any>({
         idOrPath: task.Path,
@@ -86,10 +88,10 @@ const TodoListPanel = () => {
           Status: 'active',
         },
       })
-      newChecked.splice(currentIndex, 1)
+      newdata[currentIndex].Status = Status.active
     }
-    setChecked(newChecked)
-    console.log(checked)
+    setData(newdata)
+    console.log(data[currentIndex])
   }
 
   const TodoItems = data.map(d => {
