@@ -92,13 +92,14 @@ const TodoListPanel = () => {
     // rearrange task order
     newdata.sort((a, b) => {
       if (a.Status === undefined || b.Status === undefined || a.Status === b.Status) {
-        return a.CreationDate == undefined || b.CreationDate == undefined || a.CreationDate > b.CreationDate
+        return a.CreationDate === undefined || b.CreationDate === undefined || a.CreationDate === b.CreationDate
+          ? 0
+          : a.CreationDate < b.CreationDate
           ? 1
-          : b.CreationDate < a.CreationDate
-          ? -1
-          : 0
+          : -1
+      } else {
+        return a.Status > b.Status ? 1 : b.Status > a.Status ? -1 : 0
       }
-      return a.Status > b.Status ? 1 : b.Status > a.Status ? -1 : 0
     })
 
     // update data state
@@ -120,7 +121,7 @@ const TodoListPanel = () => {
             inputProps={{ 'aria-labelledby': labelId }}
           />
         </ListItemIcon>
-        <ListItemText id={labelId} primary={`${d.DisplayName}`} className={classCompleted} />
+        <ListItemText id={labelId} primary={`${d.DisplayName}(${d.CreationDate})`} className={classCompleted} />
         <ListItemSecondaryAction>
           <IconButton edge="end" aria-label="Delete" onClick={() => deleteTask(d)}>
             <DeleteIcon />
