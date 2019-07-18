@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import moment from 'moment'
 
 // start of material imports
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
@@ -122,16 +121,16 @@ const TodoListPanel = () => {
     const result: ODataResponse<Task> = await repo.post({
       parentPath: `${ConstantContent.PORTAL_ROOT.Path}/Content/IT/Tasks`,
       contentType: 'Task',
+      oDataOptions: {
+        select: ['DisplayName', 'Status', 'CreationDate'] as any,
+      },
       content: {
         Name: text,
       },
     })
 
     const createdTask = result.d
-    // status and creation date are not coming back from odata response
-    createdTask.Status = Status.active
-    const cDate = new Date()
-    createdTask.CreationDate = moment(cDate).format('YYYY-MM-DD HH:mm:ss')
+
     // put new item top of the list
     const newdata = [createdTask, ...data]
 
@@ -187,7 +186,7 @@ const TodoListPanel = () => {
             inputProps={{ 'aria-labelledby': labelId }}
           />
         </ListItemIcon>
-        <ListItemText id={labelId} primary={`${d.DisplayName} - ${d.CreationDate}`} className={classCompleted} />
+        <ListItemText id={labelId} primary={`${d.DisplayName}`} className={classCompleted} />
         <ListItemSecondaryAction>
           <IconButton edge="end" aria-label="Delete" onClick={() => deleteTask(d)}>
             <DeleteIcon />
