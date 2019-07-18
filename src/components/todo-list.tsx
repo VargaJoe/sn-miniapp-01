@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import moment from 'moment'
 
 // start of material imports
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
@@ -101,14 +102,14 @@ const TodoListPanel = () => {
 
     // rearrange task order
     newdata.sort((a, b) => {
-      if (a.Status === undefined || b.Status === undefined || a.Status === b.Status) {
-        return a.CreationDate === undefined || b.CreationDate === undefined || a.CreationDate === b.CreationDate
-          ? 0
-          : a.CreationDate < b.CreationDate
-          ? 1
-          : -1
+      const aStatus = a.Status == undefined ? Status.active : a.Status
+      const bStatus = b.Status == undefined ? Status.active : b.Status
+      if (aStatus == bStatus) {
+        const aDate = a.CreationDate === undefined ? new Date() : new Date(a.CreationDate)
+        const bDate = b.CreationDate === undefined ? new Date() : new Date(b.CreationDate)
+        return aDate == bDate ? 0 : aDate < bDate ? 1 : -1
       } else {
-        return a.Status > b.Status ? 1 : b.Status > a.Status ? -1 : 0
+        return aStatus > bStatus ? 1 : bStatus > aStatus ? -1 : 0
       }
     })
 
@@ -125,8 +126,14 @@ const TodoListPanel = () => {
         Name: text,
       },
     })
+
+    const createdTask = result.d
+    // status and creation date are not coming back from odata response
+    createdTask.Status = Status.active
+    const cDate = new Date()
+    createdTask.CreationDate = moment(cDate).format('YYYY-MM-DD HH:mm:ss')
     // put new item top of the list
-    const newdata = [result.d, ...data]
+    const newdata = [createdTask, ...data]
 
     // update data state
     setData(newdata)
@@ -180,7 +187,7 @@ const TodoListPanel = () => {
             inputProps={{ 'aria-labelledby': labelId }}
           />
         </ListItemIcon>
-        <ListItemText id={labelId} primary={`${d.DisplayName}`} className={classCompleted} />
+        <ListItemText id={labelId} primary={`${d.DisplayName} - ${d.CreationDate}`} className={classCompleted} />
         <ListItemSecondaryAction>
           <IconButton edge="end" aria-label="Delete" onClick={() => deleteTask(d)}>
             <DeleteIcon />
