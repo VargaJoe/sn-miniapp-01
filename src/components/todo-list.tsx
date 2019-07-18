@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 // start of material imports
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { Grid } from '@material-ui/core'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      maxWidth: 360,
+      /* maxWidth: 360, */
       backgroundColor: theme.palette.background.paper,
     },
     container: {
@@ -197,10 +198,14 @@ const TodoListPanel = () => {
   })
 
   return (
-    <List className={classes.root}>
-      {TodoInput}
-      {TodoItems}
-    </List>
+    <Grid container justify="center" alignItems="center">
+      <Grid item xs={12} md={4}>
+        <List className={classes.root}>
+          {TodoInput}
+          {TodoItems}
+        </List>
+      </Grid>
+    </Grid>
   )
 }
 

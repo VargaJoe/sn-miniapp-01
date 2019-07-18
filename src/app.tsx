@@ -1,13 +1,20 @@
 import React from 'react'
-import { Container, CssBaseline } from '@material-ui/core'
-import useScrollTrigger from '@material-ui/core/useScrollTrigger'
 import PropTypes from 'prop-types'
+
+// start of material imports
+import { Container, CssBaseline, Grid } from '@material-ui/core'
+import useScrollTrigger from '@material-ui/core/useScrollTrigger'
 import Toolbar from '@material-ui/core/Toolbar'
+// end of material imports
+
+// start of sensenet imports
 import snLogo from './assets/sensenet_logo_transparent.png'
-// import { useCurrentUser } from './hooks/use-current-user'
-// import { useRepository } from './hooks/use-repository'
+// end of materiasensenet imports
+
+// start of component imports
 import HeaderPanel from './components/header'
 import TodoListPanel from './components/todo-list'
+// end of component imports
 
 interface Props {
   window?: () => Window
@@ -47,6 +54,7 @@ export const App: React.FunctionComponent = (props: Props) => {
   // const repo = useRepository()
   return (
     <React.Fragment>
+      <CssBaseline />
       <ElevationScroll {...props}>
         <HeaderPanel />
       </ElevationScroll>
@@ -54,31 +62,23 @@ export const App: React.FunctionComponent = (props: Props) => {
       <Container
         maxWidth="lg"
         style={{
-          minHeight: '100vh',
-          marginTop: '10px',
+          minHeight: '90vh',
           display: 'flex',
           verticalAlign: 'middle',
           alignItems: 'center',
           justifyContent: 'center',
           width: '100%',
-          height: '100%',
           flexDirection: 'column',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           backgroundImage: `url(${snLogo})`,
           backgroundSize: 'auto',
         }}>
-        <CssBaseline />
-
-        {/* <Typography variant="h3" gutterBottom>
-        Hello, {usr.Name} 😎
-      </Typography> */}
-        <TodoListPanel />
-        {/* <Tooltip title="Return to the Login screen and select another repository">
-        <Button variant="outlined" color="primary" onClick={() => repo.authentication.logout()}>
-          Log out 🚪
-        </Button>
-      </Tooltip> */}
+        <Grid container>
+          <Grid item xs={12}>
+            <TodoListPanel />
+          </Grid>
+        </Grid>
       </Container>
     </React.Fragment>
   )
