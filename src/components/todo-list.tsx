@@ -143,6 +143,10 @@ const TodoListPanel = () => {
     setNewTask(event.target.value)
   }
 
+  const cleanInput = () => {
+    setNewTask('')
+  }
+
   const TodoInput = (
     <form
       className={classes.container}
@@ -150,7 +154,7 @@ const TodoListPanel = () => {
       autoComplete="off"
       onSubmit={ev => {
         ev.preventDefault()
-        createTask(newTask)
+        createTask(newTask).then(() => cleanInput())
       }}>
       <TextField
         id="newTaskInput"

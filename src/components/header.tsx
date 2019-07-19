@@ -6,7 +6,7 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
-import AddIcon from '@material-ui/icons/Add'
+// import AddIcon from '@material-ui/icons/Add'
 import LogoutIcon from '@material-ui/icons/PowerSettingsNew'
 // end of material imports
 
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       flexGrow: 1,
-      align: 'center',
+      // align: 'center',
     },
     userName: {
       flexGrow: 1,
@@ -63,15 +63,12 @@ const HeaderPanel = () => {
     <div className={classes.root}>
       <AppBar position="fixed">
         <Toolbar>
-          <Typography variant="h6" className={classes.userName}>
-            {usr.FullName}
-          </Typography>
           <Typography variant="h6" className={classes.title}>
-            {container != null ? container.DisplayName : 'Eh!'}
+            {usr.DisplayName}&apos;s {container != null ? container.DisplayName : 'error!'}
           </Typography>
-          <IconButton edge="start" className={classes.addTaskButton} color="inherit" aria-label="AddTask">
+          {/* <IconButton edge="start" className={classes.addTaskButton} color="inherit" aria-label="AddTask">
             <AddIcon />
-          </IconButton>
+          </IconButton> */}
           <IconButton
             edge="start"
             className={classes.logoutButton}
