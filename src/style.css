@@ -42,3 +42,7 @@ body {
 .comp {
   text-decoration: line-through;
 }
+
+.lurkBtn {
+  display: none !important;
+}

@@ -147,6 +147,22 @@ const TodoListPanel = () => {
     setNewTask('')
   }
 
+  const showDeleteBtn = (itemId: string) => {
+    const item = document.getElementById(itemId)
+    if (item != null) {
+      // item.style.display = 'block'
+      item.className = item.className.replace(' lurkBtn ', '')
+    }
+  }
+
+  const hideDeleteBtn = (itemId: string) => {
+    const item = document.getElementById(itemId)
+    if (item != null) {
+      // item.style.display = 'none'
+      item.className = `${item.className} lurkBtn `
+    }
+  }
+
   const TodoInput = (
     <form
       className={classes.container}
@@ -178,10 +194,18 @@ const TodoListPanel = () => {
 
   const TodoItems = data.map(d => {
     const labelId = `checkbox-list-label-${d.Id}`
+    const deleteId = `checkbox-list-deletebtn-${d.Id}`
     const classCompleted = d.Status == 'completed' ? 'comp' : ''
 
     return (
-      <ListItem key={d.Id} role={undefined} dense button onClick={() => toggleTask(d)}>
+      <ListItem
+        key={d.Id}
+        role={undefined}
+        dense
+        button
+        onClick={() => toggleTask(d)}
+        onMouseEnter={() => showDeleteBtn(deleteId)}
+        onMouseLeave={() => hideDeleteBtn(deleteId)}>
         <ListItemIcon>
           <Checkbox
             edge="start"
@@ -193,8 +217,8 @@ const TodoListPanel = () => {
         </ListItemIcon>
         <ListItemText id={labelId} primary={`${d.DisplayName}`} className={classCompleted} />
         <ListItemSecondaryAction>
-          <IconButton edge="end" aria-label="Delete" onClick={() => deleteTask(d)}>
-            <DeleteIcon />
+          <IconButton id={deleteId} className="lurkBtn" edge="end" aria-label="Delete" onClick={() => deleteTask(d)}>
+            <DeleteIcon onMouseEnter={() => showDeleteBtn(deleteId)} />
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
