@@ -1,7 +1,7 @@
 # sn-react-typescript-boilerplate
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/f3d58505-1366-49cc-b6f2-4b2fcc560966/deploy-status)](https://app.netlify.com/sites/sn-react-typescript-boilerplate/deploys)
-
+ 
 Boilerplate app for sensenet SPA development with React and Typescript
 
 ## Package content
