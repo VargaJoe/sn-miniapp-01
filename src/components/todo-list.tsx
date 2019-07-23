@@ -177,6 +177,7 @@ const TodoListPanel = () => {
         label="New task"
         className={classes.textField}
         value={newTask}
+        fullWidth
         // onKeyPress={ev => {
         //   console.log(`Pressed keyCode ${ev.key}`)
         //   if (ev.key === 'Enter') {
