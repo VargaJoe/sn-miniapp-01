@@ -58,7 +58,7 @@ You can simply run `npm run build` or `yarn build` to create the bundle. It will
 ### Netlify site
 
 1. Log in to Netlify. If you don't have a Netlify account, sign up for free [here](https://www.netlify.com/)
-1. Create a new site with _New site_ from Git button
+1. Create a new site with _New site from Git_ button
 1. Select GitHub at _Continuous Deployment_ section
 1. Authorize Netlify on GitHub modal window
 1. Select repository for deploy
