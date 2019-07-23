@@ -203,7 +203,6 @@ const TodoListPanel = () => {
         role={undefined}
         dense
         button
-        onClick={() => toggleTask(d)}
         onMouseEnter={() => showDeleteBtn(deleteId)}
         onMouseLeave={() => hideDeleteBtn(deleteId)}>
         <ListItemIcon>
@@ -213,6 +212,7 @@ const TodoListPanel = () => {
             tabIndex={-1}
             disableRipple
             inputProps={{ 'aria-labelledby': labelId }}
+            onClick={() => toggleTask(d)}
           />
         </ListItemIcon>
         <ListItemText id={labelId} primary={`${d.DisplayName}`} className={classCompleted} />

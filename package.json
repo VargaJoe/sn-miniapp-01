@@ -1,5 +1,5 @@
 {
-  "name": "@sensenet/react-typescript-boilerplate",
+  "name": "@sensenet/react-typescript-tasklist",
   "version": "0.0.1",
   "main": "dist/index.js",
   "files": [
@@ -12,7 +12,9 @@
     "single page application",
     "boilerplate",
     "react",
-    "typescript"
+    "typescript",
+    "task",
+    "todo"
   ],
   "scripts": {
     "fix:prettier": "prettier \"{,!(dist|temp|bundle)/**/}*.{ts,tsx}\" --write",
