@@ -11,14 +11,17 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
-import TextField from '@material-ui/core/TextField'
 // end of material imports
 
 // start of sensenet imports
-import { ConstantContent, ODataCollectionResponse, ODataResponse } from '@sensenet/client-core'
+import { ODataCollectionResponse } from '@sensenet/client-core'
 import { Status, Task } from '@sensenet/default-content-types'
 import { useRepository } from '../hooks/use-repository'
 // end of sensenet imports
+
+// start of component imports
+import NewTaskPanel from './new-task'
+// end of component imports
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,7 +47,6 @@ const TodoListPanel = () => {
   const repo = useRepository() // Custom hook that will return with a Repository object
   const classes = useStyles()
   const [data, setData] = useState<Task[]>([])
-  const [newTask, setNewTask] = React.useState<string>('')
 
   useEffect(() => {
     /**
@@ -93,10 +95,10 @@ const TodoListPanel = () => {
     newdata.sort((a, b) => {
       const aStatus = a.Status === undefined ? Status.active : a.Status
       const bStatus = b.Status === undefined ? Status.active : b.Status
-      if (aStatus === bStatus) {
+      if (aStatus == bStatus) {
         const aDate = a.CreationDate === undefined ? new Date() : new Date(a.CreationDate)
         const bDate = b.CreationDate === undefined ? new Date() : new Date(b.CreationDate)
-        return aDate === bDate ? 0 : aDate < bDate ? 1 : -1
+        return aDate == bDate ? 0 : aDate < bDate ? 1 : -1
       } else {
         return aStatus > bStatus ? 1 : bStatus > aStatus ? -1 : 0
       }
@@ -104,36 +106,6 @@ const TodoListPanel = () => {
 
     // update data state
     setData(newdata)
-  }
-
-  // Create new task
-  const createTask = async (text: string) => {
-    const result: ODataResponse<Task> = await repo.post({
-      parentPath: `${ConstantContent.PORTAL_ROOT.Path}/Content/IT/Tasks`,
-      contentType: 'Task',
-      oDataOptions: {
-        select: ['DisplayName', 'Status', 'CreationDate'] as any,
-      },
-      content: {
-        Name: text,
-      },
-    })
-
-    const createdTask = result.d
-
-    // put new item top of the list
-    const newdata = [createdTask, ...data]
-
-    // update data state
-    setData(newdata)
-  }
-
-  const handleChange = () => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTask(event.target.value)
-  }
-
-  const cleanInput = () => {
-    setNewTask('')
   }
 
   const showDeleteBtn = (itemId: string) => {
@@ -149,28 +121,6 @@ const TodoListPanel = () => {
       item.className = `${item.className} lurkBtn `
     }
   }
-
-  const TodoInput = (
-    <form
-      className={classes.container}
-      noValidate
-      autoComplete="off"
-      onSubmit={ev => {
-        ev.preventDefault()
-        createTask(newTask).then(() => cleanInput())
-      }}>
-      <TextField
-        id="newTaskInput"
-        label="New task"
-        className={classes.textField}
-        value={newTask}
-        fullWidth
-        onChange={handleChange()}
-        margin="normal"
-        variant="outlined"
-      />
-    </form>
-  )
 
   const TodoItems = data.map(d => {
     const labelId = `checkbox-list-label-${d.Id}`
@@ -188,14 +138,18 @@ const TodoListPanel = () => {
         <ListItemIcon>
           <Checkbox
             edge="start"
-            checked={d.Status === Status.completed}
+            checked={d.Status == Status.completed}
             tabIndex={-1}
             disableRipple
             inputProps={{ 'aria-labelledby': labelId }}
             onClick={() => toggleTask(d)}
           />
         </ListItemIcon>
-        <ListItemText id={labelId} primary={`${d.DisplayName}`} className={classCompleted} />
+        <ListItemText
+          id={labelId}
+          primary={`${d.DisplayName} / ${d.CreationDate} / ${d.Status}`}
+          className={classCompleted}
+        />
         <ListItemSecondaryAction>
           <IconButton id={deleteId} className="lurkBtn" edge="end" aria-label="Delete" onClick={() => deleteTask(d)}>
             <DeleteIcon onMouseEnter={() => showDeleteBtn(deleteId)} />
@@ -209,7 +163,7 @@ const TodoListPanel = () => {
     <Grid container justify="center" alignItems="center">
       <Grid item xs={12} md={4}>
         <List className={classes.root}>
-          {TodoInput}
+          <NewTaskPanel data={data} setData={setData} />
           {TodoItems}
         </List>
       </Grid>
