@@ -3,15 +3,14 @@ import React, { useEffect, useState } from 'react'
 // start of material imports
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
+import IconButton from '@material-ui/core/IconButton'
+import LogoutIcon from '@material-ui/icons/PowerSettingsNew'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import IconButton from '@material-ui/core/IconButton'
-// import AddIcon from '@material-ui/icons/Add'
-import LogoutIcon from '@material-ui/icons/PowerSettingsNew'
 // end of material imports
 
 // start of sensenet imports
-import { ConstantContent, ODataResponse } from '@sensenet/client-core'
+import { ODataResponse } from '@sensenet/client-core'
 import { GenericContent } from '@sensenet/default-content-types'
 import { useRepository } from '../hooks/use-repository'
 import { useCurrentUser } from '../hooks/use-current-user'
@@ -32,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       flexGrow: 1,
-      // align: 'center',
     },
     userName: {
       flexGrow: 1,
@@ -52,7 +50,7 @@ const HeaderPanel = () => {
      */
     async function loadContent() {
       const result: ODataResponse<GenericContent> = await repo.load({
-        idOrPath: `${ConstantContent.PORTAL_ROOT.Path}/Content/IT/Tasks`,
+        idOrPath: `/Root/Content/IT/Tasks`,
       })
       setContainer(result.d)
     }
@@ -64,11 +62,9 @@ const HeaderPanel = () => {
       <AppBar position="fixed">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            {usr.DisplayName}&apos;s {container != null ? container.DisplayName : 'error!'}
+            {usr.DisplayName}
+            {container !== undefined ? `'s ${container.DisplayName}` : ''}
           </Typography>
-          {/* <IconButton edge="start" className={classes.addTaskButton} color="inherit" aria-label="AddTask">
-            <AddIcon />
-          </IconButton> */}
           <IconButton
             edge="start"
             className={classes.logoutButton}

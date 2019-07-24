@@ -2,22 +2,21 @@ import React, { useEffect, useState } from 'react'
 
 // start of material imports
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { Grid } from '@material-ui/core'
+import Checkbox from '@material-ui/core/Checkbox'
+import DeleteIcon from '@material-ui/icons/Delete'
+import Grid from '@material-ui/core/Grid'
+import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
-import Checkbox from '@material-ui/core/Checkbox'
-import IconButton from '@material-ui/core/IconButton'
-import DeleteIcon from '@material-ui/icons/Delete'
 import TextField from '@material-ui/core/TextField'
 // end of material imports
 
 // start of sensenet imports
 import { ConstantContent, ODataCollectionResponse, ODataResponse } from '@sensenet/client-core'
-import { Task } from '@sensenet/default-content-types'
-import { Status } from '@sensenet/default-content-types/src/Enums'
+import { Status, Task } from '@sensenet/default-content-types'
 import { useRepository } from '../hooks/use-repository'
 // end of sensenet imports
 
@@ -25,7 +24,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      /* maxWidth: 360, */
       backgroundColor: theme.palette.background.paper,
     },
     container: {
@@ -54,7 +52,7 @@ const TodoListPanel = () => {
      */
     async function loadContents() {
       const result: ODataCollectionResponse<Task> = await repo.loadCollection({
-        path: `${ConstantContent.PORTAL_ROOT.Path}/Content/IT/Tasks`,
+        path: `/Root/Content/IT/Tasks`,
         oDataOptions: {
           select: ['DisplayName', 'Description', 'CreationDate', 'CreatedBy', 'Status'] as any,
           orderby: ['Status', ['CreationDate', 'desc']],
@@ -69,7 +67,7 @@ const TodoListPanel = () => {
 
   // Remove current task
   const deleteTask = async (task: Task) => {
-    const newdata = [...data.filter(x => x.Id != task.Id)]
+    const newdata = [...data.filter(x => x.Id !== task.Id)]
     await repo.delete({
       idOrPath: task.Path,
       permanent: true,
@@ -80,34 +78,25 @@ const TodoListPanel = () => {
   const toggleTask = async (task: Task) => {
     const currentIndex = data.indexOf(task)
     const newdata = [...data]
+    const newStatus = task.Status === Status.completed ? Status.active : Status.completed
 
     // toggle current task status
-    if (task.Status != 'completed') {
-      await repo.patch<any>({
-        idOrPath: task.Path,
-        content: {
-          Status: 'completed',
-        },
-      })
-      newdata[currentIndex].Status = Status.completed
-    } else {
-      await repo.patch<any>({
-        idOrPath: task.Path,
-        content: {
-          Status: 'active',
-        },
-      })
-      newdata[currentIndex].Status = Status.active
-    }
+    await repo.patch<Task>({
+      idOrPath: task.Path,
+      content: {
+        Status: newStatus,
+      },
+    })
+    newdata[currentIndex].Status = newStatus
 
     // rearrange task order
     newdata.sort((a, b) => {
-      const aStatus = a.Status == undefined ? Status.active : a.Status
-      const bStatus = b.Status == undefined ? Status.active : b.Status
-      if (aStatus == bStatus) {
+      const aStatus = a.Status === undefined ? Status.active : a.Status
+      const bStatus = b.Status === undefined ? Status.active : b.Status
+      if (aStatus === bStatus) {
         const aDate = a.CreationDate === undefined ? new Date() : new Date(a.CreationDate)
         const bDate = b.CreationDate === undefined ? new Date() : new Date(b.CreationDate)
-        return aDate == bDate ? 0 : aDate < bDate ? 1 : -1
+        return aDate === bDate ? 0 : aDate < bDate ? 1 : -1
       } else {
         return aStatus > bStatus ? 1 : bStatus > aStatus ? -1 : 0
       }
@@ -149,16 +138,14 @@ const TodoListPanel = () => {
 
   const showDeleteBtn = (itemId: string) => {
     const item = document.getElementById(itemId)
-    if (item != null) {
-      // item.style.display = 'block'
+    if (item !== null) {
       item.className = item.className.replace(' lurkBtn ', '')
     }
   }
 
   const hideDeleteBtn = (itemId: string) => {
     const item = document.getElementById(itemId)
-    if (item != null) {
-      // item.style.display = 'none'
+    if (item !== null) {
       item.className = `${item.className} lurkBtn `
     }
   }
@@ -178,14 +165,6 @@ const TodoListPanel = () => {
         className={classes.textField}
         value={newTask}
         fullWidth
-        // onKeyPress={ev => {
-        //   console.log(`Pressed keyCode ${ev.key}`)
-        //   if (ev.key === 'Enter') {
-        //     // Do code here
-        //     ev.preventDefault()
-        //     createTask('asd')
-        //   }
-        // }}
         onChange={handleChange()}
         margin="normal"
         variant="outlined"
@@ -196,7 +175,7 @@ const TodoListPanel = () => {
   const TodoItems = data.map(d => {
     const labelId = `checkbox-list-label-${d.Id}`
     const deleteId = `checkbox-list-deletebtn-${d.Id}`
-    const classCompleted = d.Status == 'completed' ? 'comp' : ''
+    const classCompleted = d.Status === Status.completed ? 'comp' : ''
 
     return (
       <ListItem
@@ -209,7 +188,7 @@ const TodoListPanel = () => {
         <ListItemIcon>
           <Checkbox
             edge="start"
-            checked={d.Status == 'completed'}
+            checked={d.Status === Status.completed}
             tabIndex={-1}
             disableRipple
             inputProps={{ 'aria-labelledby': labelId }}
