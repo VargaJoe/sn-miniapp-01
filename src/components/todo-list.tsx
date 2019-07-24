@@ -37,6 +37,14 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
     },
+    listItemSecondaryAction: {
+      visibility: 'hidden',
+    },
+    listItem: {
+      '&:hover $listItemSecondaryAction': {
+        visibility: 'inherit',
+      },
+    },
   }),
 )
 
@@ -108,20 +116,6 @@ const TodoListPanel = () => {
     setData(newdata)
   }
 
-  const showDeleteBtn = (itemId: string) => {
-    const item = document.getElementById(itemId)
-    if (item !== null) {
-      item.className = item.className.replace(' lurkBtn ', '')
-    }
-  }
-
-  const hideDeleteBtn = (itemId: string) => {
-    const item = document.getElementById(itemId)
-    if (item !== null) {
-      item.className = `${item.className} lurkBtn `
-    }
-  }
-
   const TodoItems = data.map(d => {
     const labelId = `checkbox-list-label-${d.Id}`
     const deleteId = `checkbox-list-deletebtn-${d.Id}`
@@ -133,8 +127,9 @@ const TodoListPanel = () => {
         role={undefined}
         dense
         button
-        onMouseEnter={() => showDeleteBtn(deleteId)}
-        onMouseLeave={() => hideDeleteBtn(deleteId)}>
+        classes={{
+          container: classes.listItem,
+        }}>
         <ListItemIcon>
           <Checkbox
             edge="start"
@@ -150,9 +145,9 @@ const TodoListPanel = () => {
           primary={`${d.DisplayName} / ${d.CreationDate} / ${d.Status}`}
           className={classCompleted}
         />
-        <ListItemSecondaryAction>
-          <IconButton id={deleteId} className="lurkBtn" edge="end" aria-label="Delete" onClick={() => deleteTask(d)}>
-            <DeleteIcon onMouseEnter={() => showDeleteBtn(deleteId)} />
+        <ListItemSecondaryAction className={classes.listItemSecondaryAction}>
+          <IconButton id={deleteId} edge="end" aria-label="Delete" onClick={() => deleteTask(d)}>
+            <DeleteIcon />
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
