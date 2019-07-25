@@ -11,11 +11,6 @@ import { Task } from '@sensenet/default-content-types'
 import { useRepository } from '../hooks/use-repository'
 // end of sensenet imports
 
-interface NewTaskPanel {
-  data: Task[]
-  setData: React.Dispatch<React.SetStateAction<Task[]>>
-}
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -33,8 +28,13 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
+interface NewTaskPanel {
+  data: Task[]
+  setData: React.Dispatch<React.SetStateAction<Task[]>>
+}
+
 /**
- * Todo List
+ * New task panel
  */
 const NewTaskPanel: React.FunctionComponent<NewTaskPanel> = ({ data, setData }) => {
   const repo = useRepository() // Custom hook that will return with a Repository object
