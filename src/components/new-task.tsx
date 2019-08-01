@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField'
 // end of material imports
 
 // start of sensenet imports
-import { ConstantContent, ODataResponse } from '@sensenet/client-core'
+import { ODataResponse } from '@sensenet/client-core'
 import { Task } from '@sensenet/default-content-types'
 import { useRepository } from '../hooks/use-repository'
 // end of sensenet imports
