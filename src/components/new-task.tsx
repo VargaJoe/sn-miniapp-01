@@ -43,8 +43,8 @@ const NewTaskPanel: React.FunctionComponent<NewTaskPanel> = ({ data, setData }) 
 
   // Create new task
   const createTask = async (text: string) => {
-    const result: ODataResponse<Task> = await repo.post({
-      parentPath: `${ConstantContent.PORTAL_ROOT.Path}/Content/IT/Tasks`,
+    const result: ODataResponse<Task> = await repo.post<Task>({
+      parentPath: `/Root/Content/IT/Tasks`,
       contentType: 'Task',
       oDataOptions: {
         select: ['DisplayName', 'Status', 'CreationDate'] as any,
