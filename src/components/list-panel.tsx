@@ -119,11 +119,7 @@ const ListPanel: React.FunctionComponent<TodoItems> = ({ data, setData }) => {
             onClick={() => toggleTask(d)}
           />
         </ListItemIcon>
-        <ListItemText
-          id={labelId}
-          primary={`${d.DisplayName} / ${d.CreationDate} / ${d.Status}`}
-          className={classCompleted}
-        />
+        <ListItemText id={labelId} primary={`${d.DisplayName}`} className={classCompleted} />
         <ListItemSecondaryAction className={classes.listItemSecondaryAction}>
           <IconButton id={deleteId} edge="end" aria-label="Delete" onClick={() => deleteTask(d)}>
             <DeleteIcon />
