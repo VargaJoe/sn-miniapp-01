@@ -32,16 +32,16 @@
   "homepage": "https://sensenet.com",
   "devDependencies": {
     "@types/enzyme": "^3.10.3",
-    "@types/jest": "^24.0.13",
+    "@types/jest": "^24.0.23",
     "@types/react": "^16.8.19",
     "@types/react-dom": "^16.8.4",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "awesome-typescript-loader": "^5.2.1",
     "css-loader": "^3.1.0",
-    "enzyme": "^3.9.0",
-    "enzyme-adapter-react-16": "^1.13.2",
-    "enzyme-to-json": "^3.3.5",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
+    "enzyme-to-json": "^3.4.3",
     "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-cypress": "^2.6.0",
@@ -53,14 +53,14 @@
     "file-loader": "^4.1.0",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^2.3.0",
-    "jest": "^24.8.0",
+    "jest": "^24.9.0",
     "lint-staged": "^8.1.7",
     "prettier": "^1.17.1",
     "rimraf": "^2.6.3",
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.1",
     "ts-config-webpack-plugin": "^1.3.1",
-    "ts-jest": "^24.0.2",
+    "ts-jest": "^24.1.0",
     "tslib": "^1.9.3",
     "typescript": "^3.5.2",
     "url-loader": "^2.1.0",
@@ -115,8 +115,7 @@
       }
     },
     "testMatch": [
-      "**/test/*.+(ts|tsx|js)",
-      "**/test/**/*.+(ts|tsx|js)"
+      "**/test/*.+(ts|tsx|js)"
     ],
     "setupFilesAfterEnv": [
       "<rootDir>/jest/setup.js"
@@ -125,7 +124,10 @@
       "enzyme-to-json/serializer"
     ],
     "collectCoverageFrom": [
-      "src/**/*.{ts,tsx}"
+      "src/**/*.{ts,tsx}",
+      "!src/context/*",
+      "!src/hooks/*",
+      "!src/index.tsx"
     ],
     "coverageReporters": [
       "json",
