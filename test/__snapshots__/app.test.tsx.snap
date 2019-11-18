@@ -3,9 +3,7 @@
 exports[`The app layout instance should renders correctly 1`] = `
 <Fragment>
   <CssBaseline />
-  <ElevationScroll>
-    <HeaderPanel />
-  </ElevationScroll>
+  <HeaderPanel />
   <WithStyles(ForwardRef(Toolbar)) />
   <WithStyles(ForwardRef(Container))
     maxWidth="lg"
