@@ -58,7 +58,6 @@ const ListPanel: React.FunctionComponent<TodoItems> = ({ data, setData }) => {
     const currentIndex = data.indexOf(task)
     const newdata = [...data]
     const newStatus = task.Status?.[0] === Status.completed ? [Status.active] : [Status.completed]
-      typeof task.Status !== 'undefined' && task.Status[0] === Status.completed ? [Status.active] : [Status.completed]
 
     // toggle current task status
     await repo.patch<Task>({
