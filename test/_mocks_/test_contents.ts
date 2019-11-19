@@ -141,3 +141,4 @@ export const sortedTodoList = [
 ]
 
 export const TestContentCollection = [TestContentC, TestContentB, TestContentA]
+export const removedlist = [TestContentB, TestContentA]
