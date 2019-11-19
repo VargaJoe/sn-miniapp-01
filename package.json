@@ -126,9 +126,10 @@
     ],
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
+      "!src/index.tsx",
+      "!src/components/login-form.tsx",
       "!src/context/*",
-      "!src/hooks/*",
-      "!src/index.tsx"
+      "!src/hooks/**/*.{ts,tsx}"
     ],
     "coverageReporters": [
       "json",
