@@ -57,7 +57,7 @@ const ListPanel: React.FunctionComponent<TodoItems> = ({ data, setData }) => {
   const toggleTask = async (task: Task) => {
     const currentIndex = data.indexOf(task)
     const newdata = [...data]
-    const newStatus =
+    const newStatus = task.Status?.[0] === Status.completed ? [Status.active] : [Status.completed]
       typeof task.Status !== 'undefined' && task.Status[0] === Status.completed ? [Status.active] : [Status.completed]
 
     // toggle current task status
