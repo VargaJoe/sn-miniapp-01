@@ -98,7 +98,7 @@ const ListPanel: React.FunctionComponent<TodoItems> = ({ data, setData }) => {
   const TodoList = data.map(d => {
     const labelId = `checkbox-list-label-${d.Id}`
     const deleteId = `checkbox-list-deletebtn-${d.Id}`
-    const classCompleted = typeof d.Status !== 'undefined' && d.Status[0] === Status.completed ? 'comp' : ''
+    const classCompleted = d.Status?.[0] === Status.completed ? 'comp' : ''
 
     return (
       <ListItem
@@ -112,7 +112,7 @@ const ListPanel: React.FunctionComponent<TodoItems> = ({ data, setData }) => {
         <ListItemIcon>
           <Checkbox
             edge="start"
-            checked={typeof d.Status !== 'undefined' && d.Status[0] == Status.completed}
+            checked={d.Status?.[0] == Status.completed}
             tabIndex={-1}
             disableRipple
             inputProps={{ 'aria-labelledby': labelId }}
