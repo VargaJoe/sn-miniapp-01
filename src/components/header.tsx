@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography'
 // start of sensenet imports
 import { ODataResponse } from '@sensenet/client-core'
 import { GenericContent } from '@sensenet/default-content-types'
-import { useRepository } from '../hooks/use-repository'
+import { useRepository } from '@sensenet/hooks-react'
 import { useCurrentUser } from '../hooks/use-current-user'
 // end of sensenet imports
 

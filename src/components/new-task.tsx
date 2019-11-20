@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField'
 // start of sensenet imports
 import { ODataResponse } from '@sensenet/client-core'
 import { Task } from '@sensenet/default-content-types'
-import { useRepository } from '../hooks/use-repository'
+import { useRepository } from '@sensenet/hooks-react'
 // end of sensenet imports
 
 const useStyles = makeStyles((theme: Theme) =>

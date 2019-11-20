@@ -14,7 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 // start of sensenet imports
 
 import { Status, Task } from '@sensenet/default-content-types'
-import { useRepository } from '../hooks/use-repository'
+import { useRepository } from '@sensenet/hooks-react'
 // end of sensenet imports
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -57,7 +57,7 @@ const ListPanel: React.FunctionComponent<TodoItems> = ({ data, setData }) => {
   const toggleTask = async (task: Task) => {
     const currentIndex = data.indexOf(task)
     const newdata = [...data]
-    const newStatus = task.Status === Status.completed ? Status.active : Status.completed
+    const newStatus = task.Status?.[0] === Status.completed ? [Status.active] : [Status.completed]
 
     // toggle current task status
     await repo.patch<Task>({
@@ -98,7 +98,7 @@ const ListPanel: React.FunctionComponent<TodoItems> = ({ data, setData }) => {
   const TodoList = data.map(d => {
     const labelId = `checkbox-list-label-${d.Id}`
     const deleteId = `checkbox-list-deletebtn-${d.Id}`
-    const classCompleted = d.Status === Status.completed ? 'comp' : ''
+    const classCompleted = d.Status?.[0] === Status.completed ? 'comp' : ''
 
     return (
       <ListItem
@@ -112,7 +112,7 @@ const ListPanel: React.FunctionComponent<TodoItems> = ({ data, setData }) => {
         <ListItemIcon>
           <Checkbox
             edge="start"
-            checked={d.Status == Status.completed}
+            checked={d.Status?.[0] == Status.completed}
             tabIndex={-1}
             disableRipple
             inputProps={{ 'aria-labelledby': labelId }}

@@ -9,7 +9,7 @@ import List from '@material-ui/core/List'
 // start of sensenet imports
 import { ODataCollectionResponse } from '@sensenet/client-core'
 import { Task } from '@sensenet/default-content-types'
-import { useRepository } from '../hooks/use-repository'
+import { useRepository } from '@sensenet/hooks-react'
 // end of sensenet imports
 
 // start of component imports
