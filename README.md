@@ -1,6 +1,6 @@
 # sn-react-typescript-tasklist
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/f3d58505-1366-49cc-b6f2-4b2fcc560966/deploy-status)](https://app.netlify.com/sites/sntasklist/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/96f402b6-25af-4cc5-9dd2-6778cf6ab5b0/deploy-status)](https://app.netlify.com/sites/sntasklist/deploys)
  
 Tasklist app for sensenet SPA development with React and Typescript
 
