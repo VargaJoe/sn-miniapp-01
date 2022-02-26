@@ -4,6 +4,8 @@
  
 Tasklist app for sensenet SPA development with React and Typescript
 
+> This miniapp was in very early stage, newer version can be found among sensenet's [sn-client](https://github.com/SenseNet/sn-client) monorepo examples.
+
 ## Package content
 
 - An example tasklist React SPA with sensenet repository login, written in Typescript ✨
